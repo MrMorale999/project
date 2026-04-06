@@ -1,0 +1,36 @@
+<div class="container">
+  <h1>{{ title }}</h1>
+  <p>{{ message }}</p>
+
+  <section>
+    <h2>WebSocket</h2>
+    <p>Stato: {{ wsStatus }}</p>
+    <button type="button" (click)="sendWebsocketMessage()">Invia messaggio WebSocket</button>
+    <ul>
+      <li *ngFor="let msg of wsMessages">{{ msg }}</li>
+    </ul>
+  </section>
+
+  <section style="margin-top:1rem;">
+    <h2>Invia notifica WebSocket</h2>
+    <div>
+      <label>Titolo: <input type="text" [(ngModel)]="notifyTitle" placeholder="Titolo notifica"></label>
+    </div>
+    <div>
+      <label>Messaggio: <input type="text" [(ngModel)]="notifyText" placeholder="Corpo notifica"></label>
+    </div>
+    <button type="button" (click)="sendNotify()">Invia notifica</button>
+    <p>{{ notifyResult }}</p>
+  </section>
+
+  <div class="modal-overlay" *ngIf="notificationVisible" (click)="closeNotification()">
+    <div class="modal" (click)="$event.stopPropagation()">
+      <div class="modal-header">
+        <h3>{{ notificationTitle }}</h3>
+        <button class="modal-close" type="button" (click)="closeNotification()">×</button>
+      </div>
+      <p>{{ notificationBody }}</p>
+      <div class="progress-wrap"><div class="progress-bar" [style.width.%]="notificationProgress"></div></div>
+    </div>
+  </div>
+</div>

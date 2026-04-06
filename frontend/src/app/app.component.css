@@ -1,0 +1,88 @@
+.container {
+  font-family: Arial, sans-serif;
+  margin: 32px;
+}
+
+h1 {
+  color: #1976d2;
+}
+
+.modal-overlay {
+  position: fixed !important;
+  top: 16px !important;
+  left: auto !important;
+  right: 16px !important;
+  bottom: auto !important;
+  width: min(340px, calc(100vw - 32px)) !important;
+  background: transparent !important;
+  display: block !important;
+  z-index: 999999 !important;
+  pointer-events: none !important;
+}
+
+.modal {
+  position: relative !important;
+  margin: 0 !important;
+  background: linear-gradient(150deg, #111827, #1f2937) !important;
+  color: #fff !important;
+  border-radius: 12px !important;
+  padding: 14px 14px 8px 14px !important;
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.45) !important;
+  z-index: 1000000 !important;
+  opacity: 1 !important;
+  pointer-events: auto !important;
+  overflow: hidden !important;
+}
+
+.modal-header {
+  display: flex !important;
+  justify-content: space-between !important;
+  align-items: center !important;
+}
+
+.modal h3 {
+  margin: 0 !important;
+  font-size: 1rem !important;
+}
+
+.modal-close {
+  background: rgba(255, 255, 255, 0.14) !important;
+  border: 0 !important;
+  color: #fff !important;
+  font-size: 18px !important;
+  width: 28px !important;
+  height: 28px !important;
+  border-radius: 50% !important;
+  cursor: pointer !important;
+}
+
+.modal p {
+  margin: 8px 0 6px 0 !important;
+  font-size: 0.92rem !important;
+  opacity: 0.88 !important;
+}
+
+.progress-wrap {
+  height: 4px !important;
+  width: 100% !important;
+  border-radius: 999px !important;
+  background: rgba(255, 255, 255, 0.16) !important;
+  overflow: hidden !important;
+}
+
+.progress-bar {
+  height: 100% !important;
+  background: linear-gradient(90deg, #22c55e, #14b8a6) !important;
+  transition: width 0.1s linear !important;
+}
+
+
+
+.modal h3 {
+  margin-top: 0;
+}
+
+.modal button {
+  margin-top: 1rem;
+}
+

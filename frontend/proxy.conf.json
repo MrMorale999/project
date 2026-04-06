@@ -6,7 +6,7 @@
     "logLevel": "debug"
   },
   "/ws": {
-    "target": "wss://project-backend-ghxn.onrender.com/ws",
+    "target": "wss://project-backend-ghxn.onrender.com",
     "ws": true,
     "secure": false,
     "changeOrigin": true,

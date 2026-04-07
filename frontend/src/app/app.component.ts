@@ -13,20 +13,24 @@ import { WebsocketService } from './websocket.service';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent implements OnInit, OnDestroy {
-  title = 'Frontend Angular';
-  message = 'Caricamento in corso...';
+  title = 'Beaver'; // Nome più "tranquillo"
+  message = ''; // Inizialmente vuoto per pulizia
 
-  wsStatus = 'Non connesso';
+  wsStatus = '...';
   wsMessages: string[] = [];
   notificationVisible = false;
   notificationTitle = '';
   notificationBody = '';
   notificationProgress = 100;
+  
   private hideTimeout?: any;
   private progressInterval?: any;
-
   private destroy$ = new Subject<void>();
   private wsUrl = `${window.location.protocol === 'https:' ? 'wss:' : 'ws:'}//${window.location.host}/ws/echo`;
+
+  notifyText = '';
+  notifyTitle = '';
+  notifyResult = '';
 
   constructor(
     private appService: AppService,
@@ -36,106 +40,63 @@ export class AppComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.appService.getHello()
-      .pipe(
-        timeout(8000),
-        catchError(() => of({ text: 'Impossibile raggiungere il backend.' }))
-      )
-      .subscribe({
-        next: data => this.message = data.text,
-        error: () => this.message = 'Impossibile raggiungere il backend.'
-      });
+      .pipe(timeout(5000), catchError(() => of({ text: '' })))
+      .subscribe(data => this.message = data.text);
 
     this.websocketService.getStatus()
       .pipe(takeUntil(this.destroy$))
-      .subscribe(status => this.wsStatus = status);
+      .subscribe(status => {
+        this.wsStatus = status;
+        this.cdr.detectChanges();
+      });
 
     this.websocketService.connect(this.wsUrl)
       .pipe(takeUntil(this.destroy$))
-      .subscribe({
-        next: msg => {
-          console.log('Echo messaggio WebSocket', msg);
-          this.wsMessages.push(msg);
-        },
-        error: () => this.wsMessages.push('Errore di comunicazione WebSocket'),
+      .subscribe(msg => {
+        this.wsMessages.push(msg);
+        this.cdr.detectChanges();
       });
 
     this.websocketService.getNotifications()
       .pipe(takeUntil(this.destroy$))
       .subscribe(notification => {
-        console.log('Notifica ricevuta in componente', notification);
         this.notificationTitle = notification.title;
         this.notificationBody = notification.body;
         this.notificationVisible = true;
-        console.log('notificationVisible impostato a', this.notificationVisible);
-        this.cdr.detectChanges();
-
-        if (this.hideTimeout) {
-          clearTimeout(this.hideTimeout);
-        }
-        if (this.progressInterval) {
-          clearInterval(this.progressInterval);
-        }
-
         this.notificationProgress = 100;
 
+        if (this.hideTimeout) clearTimeout(this.hideTimeout);
+        if (this.progressInterval) clearInterval(this.progressInterval);
+
         this.progressInterval = setInterval(() => {
-          this.notificationProgress -= 2;
-          if (this.notificationProgress <= 0) {
-            clearInterval(this.progressInterval);
-            this.notificationProgress = 0;
-          }
+          this.notificationProgress -= 1;
+          if (this.notificationProgress <= 0) clearInterval(this.progressInterval);
           this.cdr.detectChanges();
-        }, 100);
+        }, 50); // 5 secondi totali
 
         this.hideTimeout = setTimeout(() => {
           this.notificationVisible = false;
           this.cdr.detectChanges();
-          if (this.progressInterval) {
-            clearInterval(this.progressInterval);
-          }
         }, 5000);
       });
-
   }
 
   sendWebsocketMessage(): void {
-    this.websocketService.send('Ciao dal client!');
+    this.websocketService.send('Ping');
   }
 
-  notifyText = '';
-  notifyTitle = '';
-  notifyResult = '';
-
   sendNotify(): void {
-    const body = {
-      title: this.notifyTitle || 'Notifica dal frontend',
-      body: this.notifyText || 'Corpo della notifica inviato dal client.'
-    };
+    if (!this.notifyTitle) return;
 
     fetch('/api/notify', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(body)
-    })
-      .then(async response => {
-        if (!response.ok) {
-          const text = await response.text();
-          throw new Error(`Errore ${response.status}: ${text}`);
-        }
-        const text = await response.text();
-        this.notifyResult = 'Notifica inviata: ' + text;
-      })
-      .catch(error => {
-        console.error('Fallita chiamata notify:', error);
-        this.notifyResult = 'Invio notifica fallito: ' + error.message;
-      });
-  }
-
-  showTestModal(): void {
-    this.notificationTitle = 'TEST MODALE ATTIVO';
-    this.notificationBody = 'Questo serve per verificare rendering e stile.';
-    this.notificationVisible = true;
-    this.cdr.detectChanges();
+      body: JSON.stringify({ title: this.notifyTitle, body: this.notifyText })
+    }).then(() => {
+      this.notifyResult = 'Inviato';
+      this.notifyTitle = ''; this.notifyText = '';
+      setTimeout(() => this.notifyResult = '', 2000);
+    });
   }
 
   closeNotification(): void {

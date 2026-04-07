@@ -1,36 +1,81 @@
-<div class="container">
-  <h1>{{ title }}</h1>
-  <p>{{ message }}</p>
-
-  <section>
-    <h2>WebSocket</h2>
-    <p>Stato: {{ wsStatus }}</p>
-    <button type="button" (click)="sendWebsocketMessage()">Invia messaggio WebSocket</button>
-    <ul>
-      <li *ngFor="let msg of wsMessages">{{ msg }}</li>
-    </ul>
-  </section>
-
-  <section style="margin-top:1rem;">
-    <h2>Invia notifica WebSocket</h2>
-    <div>
-      <label>Titolo: <input type="text" [(ngModel)]="notifyTitle" placeholder="Titolo notifica"></label>
-    </div>
-    <div>
-      <label>Messaggio: <input type="text" [(ngModel)]="notifyText" placeholder="Corpo notifica"></label>
-    </div>
-    <button type="button" (click)="sendNotify()">Invia notifica</button>
-    <p>{{ notifyResult }}</p>
-  </section>
-
-  <div class="modal-overlay" *ngIf="notificationVisible" (click)="closeNotification()">
-    <div class="modal" (click)="$event.stopPropagation()">
-      <div class="modal-header">
-        <h3>{{ notificationTitle }}</h3>
-        <button class="modal-close" type="button" (click)="closeNotification()">×</button>
+<div class="min-h-screen bg-slate-50 flex flex-col font-sans text-slate-900">
+  
+  <header class="sticky top-0 z-50 bg-white/80 backdrop-blur-md border-b border-slate-200 px-6 py-4">
+    <div class="max-w-7xl mx-auto flex justify-between items-center">
+      <img src="assets/Beaver_logo.png" alt="Beaver Logo" class="w-10 h-10 object-contain">
+      <h1 class="text-xl font-black tracking-tighter uppercase text-indigo-600">
+        {{ title }}
+      </h1>
+      <div class="flex items-center gap-2 px-3 py-1 rounded-full bg-slate-100 border border-slate-200">
+        <div [class]="wsStatus === 'Connesso' ? 'bg-emerald-500' : 'bg-red-500'" class="w-2 h-2 rounded-full shadow-[0_0_8px_rgba(16,185,129,0.5)]"></div>
+        <span class="text-[10px] font-bold uppercase text-slate-500 tracking-widest">{{ wsStatus }}</span>
       </div>
-      <p>{{ notificationBody }}</p>
-      <div class="progress-wrap"><div class="progress-bar" [style.width.%]="notificationProgress"></div></div>
+    </div>
+  </header>
+
+  <main class="flex-grow p-6 md:p-12 max-w-7xl mx-auto w-full">
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+      
+      <div class="card-modern group p-8 bg-white rounded-[32px] border border-slate-200 shadow-sm hover:shadow-xl hover:-translate-y-2 transition-all duration-300">
+        <div class="w-12 h-12 bg-indigo-50 rounded-2xl flex items-center justify-center text-2xl mb-6 group-hover:bg-indigo-600 group-hover:text-white transition-colors">
+          🚀
+        </div>
+        <h3 class="text-lg font-bold mb-4">Invia Notifica</h3>
+        <div class="space-y-3">
+          <input type="text" [(ngModel)]="notifyTitle" placeholder="Titolo..." class="input-minimal">
+          <input type="text" [(ngModel)]="notifyText" placeholder="Messaggio..." class="input-minimal text-sm">
+          <button (click)="sendNotify()" class="w-full mt-4 py-3 bg-slate-900 text-white rounded-xl text-xs font-bold uppercase tracking-widest active:scale-95 transition-transform">
+            Esegui
+          </button>
+        </div>
+      </div>
+
+      <div class="card-modern-disabled p-8 bg-slate-100/50 rounded-[32px] border border-dashed border-slate-300 flex flex-col items-center justify-center text-center opacity-60">
+        <span class="text-3xl mb-4 grayscale">📊</span>
+        <h3 class="text-sm font-bold text-slate-400 uppercase tracking-widest">Statistiche</h3>
+        <p class="text-xs text-slate-400 mt-2 italic">Prossimamente</p>
+      </div>
+
+      <div class="card-modern-disabled p-8 bg-slate-100/50 rounded-[32px] border border-dashed border-slate-300 flex flex-col items-center justify-center text-center opacity-60">
+        <span class="text-3xl mb-4 grayscale">⚙️</span>
+        <h3 class="text-sm font-bold text-slate-400 uppercase tracking-widest">Impostazioni</h3>
+        <p class="text-xs text-slate-400 mt-2 italic">Prossimamente</p>
+      </div>
+
+      <div class="card-modern-disabled p-8 bg-slate-100/50 rounded-[32px] border border-dashed border-slate-300 flex flex-col items-center justify-center text-center opacity-60">
+        <span class="text-3xl mb-4 grayscale">👤</span>
+        <h3 class="text-sm font-bold text-slate-400 uppercase tracking-widest">Profilo</h3>
+        <p class="text-xs text-slate-400 mt-2 italic">Prossimamente</p>
+      </div>
+
+    </div>
+  </main>
+
+  <footer class="bg-white border-t border-slate-200 p-8">
+    <div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-6">
+      <p class="text-xs text-slate-400 font-medium tracking-wide">© 2026 Progetto Java-Angular. Tutti i diritti riservati.</p>
+      
+      <div class="flex flex-wrap justify-center gap-2">
+        <span class="badge-css">.card-modern</span>
+        <span class="badge-css">.backdrop-blur-md</span>
+        <span class="badge-css">.bg-white/80</span>
+        <span class="badge-css">.sticky</span>
+        <span class="badge-css">.shadow-xl</span>
+        <span class="badge-css">.transition-all</span>
+      </div>
+    </div>
+  </footer>
+
+  <div *ngIf="notificationVisible" class="fixed bottom-6 right-6 z-[100] animate-in slide-in-from-right-8 duration-300">
+    <div class="bg-slate-900 text-white p-5 rounded-2xl shadow-2xl min-w-[300px] border border-white/10" (click)="closeNotification()">
+      <div class="flex items-center gap-3 mb-2">
+        <div class="w-2 h-2 bg-indigo-400 rounded-full"></div>
+        <h4 class="text-xs font-black uppercase tracking-widest text-indigo-400">{{ notificationTitle }}</h4>
+      </div>
+      <p class="text-sm font-light opacity-80">{{ notificationBody }}</p>
+      <div class="mt-4 h-1 bg-white/10 rounded-full overflow-hidden">
+        <div class="h-full bg-indigo-500 transition-all duration-100" [style.width.%]="notificationProgress"></div>
+      </div>
     </div>
   </div>
 </div>

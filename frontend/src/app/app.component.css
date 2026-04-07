@@ -1,88 +1,101 @@
-.container {
-  font-family: Arial, sans-serif;
-  margin: 32px;
+/* Container principale con sfocatura */
+.main-card {
+  background: var(--glass);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.03);
 }
 
-h1 {
-  color: #1976d2;
+/* Input ultra-minimal */
+input {
+  background: transparent;
+  border: none;
+  border-bottom: 1.5px solid rgba(0, 0, 0, 0.05);
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  letter-spacing: -0.02em;
 }
 
-.modal-overlay {
-  position: fixed !important;
-  top: 16px !important;
-  left: auto !important;
-  right: 16px !important;
-  bottom: auto !important;
-  width: min(340px, calc(100vw - 32px)) !important;
-  background: transparent !important;
-  display: block !important;
-  z-index: 999999 !important;
-  pointer-events: none !important;
+input:focus {
+  border-bottom-color: var(--primary);
+  transform: translateY(-2px);
 }
 
-.modal {
-  position: relative !important;
-  margin: 0 !important;
-  background: linear-gradient(150deg, #111827, #1f2937) !important;
-  color: #fff !important;
-  border-radius: 12px !important;
-  padding: 14px 14px 8px 14px !important;
-  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.45) !important;
-  z-index: 1000000 !important;
-  opacity: 1 !important;
-  pointer-events: auto !important;
-  overflow: hidden !important;
+/* Bottone con effetto Glow */
+.btn-modern {
+  background: #18181b;
+  color: white;
+  padding: 12px 32px;
+  border-radius: 99px;
+  font-weight: 500;
+  letter-spacing: 0.05em;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
 }
 
-.modal-header {
-  display: flex !important;
-  justify-content: space-between !important;
-  align-items: center !important;
+.btn-modern:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+  background: #000;
 }
 
-.modal h3 {
-  margin: 0 !important;
-  font-size: 1rem !important;
+.btn-modern:active {
+  transform: translateY(-1px);
 }
 
-.modal-close {
-  background: rgba(255, 255, 255, 0.14) !important;
-  border: 0 !important;
-  color: #fff !important;
-  font-size: 18px !important;
-  width: 28px !important;
-  height: 28px !important;
-  border-radius: 50% !important;
-  cursor: pointer !important;
-}
-
-.modal p {
-  margin: 8px 0 6px 0 !important;
-  font-size: 0.92rem !important;
-  opacity: 0.88 !important;
-}
-
-.progress-wrap {
-  height: 4px !important;
-  width: 100% !important;
-  border-radius: 999px !important;
-  background: rgba(255, 255, 255, 0.16) !important;
-  overflow: hidden !important;
+/* Notifica (Toast) Ultra-Moderna */
+.notification-toast {
+  background: rgba(24, 24, 27, 0.85);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: white;
+  border-radius: 24px;
+  padding: 20px;
+  box-shadow: 0 30px 60px rgba(0, 0, 0, 0.2);
 }
 
 .progress-bar {
-  height: 100% !important;
-  background: linear-gradient(90deg, #22c55e, #14b8a6) !important;
-  transition: width 0.1s linear !important;
+  height: 3px;
+  background: linear-gradient(90deg, var(--primary), var(--accent));
+  border-radius: 99px;
+  transition: width 0.1s linear;
 }
 
+/* Stili Custom per componenti moderni */
 
-
-.modal h3 {
-  margin-top: 0;
+/* Input Minimale sotto la card */
+.input-minimal {
+  @apply w-full bg-slate-50 border-none rounded-xl px-4 py-2 outline-none focus:ring-2 focus:ring-indigo-500/20 transition-all;
 }
 
-.modal button {
-  margin-top: 1rem;
+/* Badge del footer per le classi CSS */
+.badge-css {
+  @apply text-[9px] font-mono bg-slate-100 text-slate-500 px-2 py-1 rounded border border-slate-200;
 }
 
+/* Animazione di hover per le card */
+.card-modern {
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+/* Scroll fluido e rifiniture */
+:host {
+  display: block;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Animazione Notifica */
+@keyframes slideInRight {
+  from { transform: translateX(100%); opacity: 0; }
+  to { transform: translateX(0); opacity: 1; }
+}
+
+.animate-in {
+  animation: slideInRight 0.4s ease-out forwards;
+}
+
+/* Effetto Glassmorphism opzionale per l'header */
+header {
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.03);
+}

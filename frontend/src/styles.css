@@ -1,1 +1,6 @@
 /* Global styles for Angular app */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Altri tuoi stili globali se ne hai */
